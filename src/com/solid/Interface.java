@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class Interface {
-    private static ArrayList<Snake> snakes = new ArrayList<Snake>();
+    public static ArrayList<Snake> snakes = new ArrayList<Snake>();
     private JPanel MPanel;
     private JButton buttonleft;
     private JButton buttonright;
@@ -23,7 +23,9 @@ public class Interface {
             @Override
             public void actionPerformed(ActionEvent e) {
                 snakes.get(0).direction += 1;
-                if (snakes.get(0).direction > 3) snakes.get(0).direction = 0;
+                if (snakes.get(0).direction > 3) {
+                    snakes.get(0).direction = 0;
+                }
             }
         });
     }
