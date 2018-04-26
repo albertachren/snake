@@ -1,2 +1,2 @@
 # snake
-Dynamic Java snake
+Dynamic Java-snake
