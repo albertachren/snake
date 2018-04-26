@@ -1,30 +1,54 @@
 package com.solid;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Interface {
-    public static ArrayList<Snake> snakes = new ArrayList<Snake>();
+    public static ArrayList<Snake> snakes = new ArrayList<>();
     private JPanel MPanel;
-    private JButton buttonleft;
-    private JButton buttonright;
     private GPanel GPanel1;
 
     public Interface() {
-        buttonleft.addActionListener(new ActionListener() {
+
+        GPanel1.setFocusable(true);
+        GPanel1.addKeyListener(new KeyAdapter() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                createSnake(3);
-            }
-        });
-        buttonright.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                snakes.get(0).direction += 1;
-                if (snakes.get(0).direction > 3) {
-                    snakes.get(0).direction = 0;
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                int key = e.getKeyCode();
+                switch (key) {
+                    case 37: //left
+                        for (Snake snake : snakes) {
+                            snake.direction = 3;
+                        }
+                        break;
+                    case 38: //up
+                        for (Snake snake : snakes) {
+                            snake.direction = 2;
+                        }
+                        break;
+                    case 39: //right
+                        for (Snake snake : snakes) {
+                            snake.direction = 1;
+                        }
+                        break;
+                    case 40: //down
+                        for (Snake snake : snakes) {
+                            snake.direction = 0;
+                        }
+                        break;
+                    case 32: //space
+                        createSnake(5, false);
+                        break;
+                    case 83: //s
+                        snakes.clear();
+                        for (int i = 0; i < 25; i++) {
+                            createSnake(5, true);
+                        }
+                        break;
                 }
             }
         });
@@ -34,7 +58,6 @@ public class Interface {
         JFrame frame = new JFrame("Interface");
         frame.setContentPane(new Interface().MPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         try {
             // Set System L&F
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -46,20 +69,17 @@ public class Interface {
         frame.setVisible(true);
     }
 
-    private void createSnake(int length) {
-        Snake boss = new Snake();
-        snakes.add(boss);
-        Timer timer = new Timer(1000, e -> refresher());
-        timer.start();
-    }
-
-    public void refresher() {
-        for (Snake s : snakes) {
-            s.update();
-            System.out.println(s.toString());
-            GPanel1.repaint();
+    private void createSnake(int length, boolean random) {
+        Random r = new Random();
+        if (random) {
+            Snake boss = new Snake(r.nextInt(1920 / GPanel.rectSide), r.nextInt(1080 / GPanel.rectSide), r.nextInt(4), length);
+            snakes.add(boss);
+        } else {
+            Snake boss = new Snake(0, 0, 0, length);
+            snakes.add(boss);
         }
     }
+
 
     private void createUIComponents() {
         GPanel1 = new GPanel();
