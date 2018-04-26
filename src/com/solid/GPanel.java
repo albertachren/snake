@@ -9,7 +9,7 @@ public class GPanel extends JPanel {
     static int rectSide = 400 / Snake.gameSize;
 
     public GPanel() {
-        Timer timer = new Timer(500, e -> refresher());
+        Timer timer = new Timer(250, e -> refresher());
         timer.start();
     }
 
@@ -42,6 +42,9 @@ public class GPanel extends JPanel {
             for (int[] part : snake.getBodyNew()) {
                 drawRectCoords(g2d, part, Color.green);
                 //System.out.println(String.valueOf(part[0]) + String.valueOf(part[1]));
+            }
+            for (int[] food : snake.food) {
+                drawRectCoords(g2d, food, Color.BLUE);
             }
         }
     }

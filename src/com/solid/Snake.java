@@ -2,6 +2,7 @@ package com.solid;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Snake {
 
@@ -10,8 +11,10 @@ public class Snake {
     int headx;
     int heady;
     int lastdir = 0;
+    static Random r = new Random();
     ArrayList<int[]> turns = new ArrayList<>();
     List<int[]> bodyparts = new ArrayList<>();
+    List<int[]> food = new ArrayList<>();
 
     public Snake(int x, int y, int dir, int bodycount) {
         headx = x;
@@ -42,6 +45,8 @@ public class Snake {
             int[] temp = {newX, newY, direction};
             bodyparts.add(temp);
         }
+        int[] newFood = {r.nextInt(40), r.nextInt(40)};
+        food.add(newFood);
     }
 
     @Override
@@ -142,6 +147,14 @@ public class Snake {
     }
 
     public void update() {
+        for (int[] food : food) {
+            if (headx == food[0] && heady == food[1]) {
+                addBodypart(this);
+                this.food.remove(food);
+                int[] newFood = {r.nextInt(40), r.nextInt(40)};
+                this.food.add(newFood);
+            }
+        }
 
         if (lastdir != direction) { // direction is changed from outside the method
             int[] newturn = {headx, heady, lastdir, direction};
@@ -198,14 +211,35 @@ public class Snake {
                 tempdistance = Math.abs(Math.abs(x) - Math.abs(headx));
             }
             distance += tempdistance;
-            if (distance > bodyparts.size()) {
+            if (distance > bodyparts.size() + 2) {
                 for (int f = i; i >= 0; i--) {
                     turns.remove(i);
+                    System.out.println("turn removed");
                 }
             }
         }
 
         lastdir = direction;
 
+    }
+
+    private void addBodypart(Snake snake) {
+        int[] parentPart = this.bodyparts.get(bodyparts.size() - 1);
+        int[] newPart = {parentPart[0], parentPart[1], parentPart[2]};
+        switch (newPart[2]) {
+            case 0:
+                newPart[1] -= 1;
+                break;
+            case 1:
+                newPart[0] -= 1;
+                break;
+            case 2:
+                newPart[1] += 1;
+                break;
+            case 3:
+                newPart[0] += 1;
+                break;
+        }
+        bodyparts.add(newPart);
     }
 }
