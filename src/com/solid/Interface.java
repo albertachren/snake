@@ -19,25 +19,26 @@ public class Interface {
             public void keyPressed(KeyEvent e) {
                 super.keyPressed(e);
                 int key = e.getKeyCode();
+                int newDir = 0;
                 switch (key) {
                     case 37: //left
                         for (Snake snake : snakes) {
-                            snake.direction = 3;
+                            newDir = 3;
                         }
                         break;
                     case 38: //up
                         for (Snake snake : snakes) {
-                            snake.direction = 2;
+                            newDir = 2;
                         }
                         break;
                     case 39: //right
                         for (Snake snake : snakes) {
-                            snake.direction = 1;
+                            newDir = 1;
                         }
                         break;
                     case 40: //down
                         for (Snake snake : snakes) {
-                            snake.direction = 0;
+                            newDir = 0;
                         }
                         break;
                     case 32: //space
@@ -50,6 +51,16 @@ public class Interface {
                         }
                         break;
                 }
+                for (Snake snake : snakes) {
+                    int opposite = newDir + 2;
+                    if (opposite > 3) {
+                        opposite -= 4;
+                    }
+                    if (snake.direction != opposite) {
+                        snake.direction = newDir;
+                    }
+                }
+
             }
         });
     }

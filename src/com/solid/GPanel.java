@@ -9,7 +9,7 @@ public class GPanel extends JPanel {
     static int rectSide = 400 / Snake.gameSize;
 
     public GPanel() {
-        Timer timer = new Timer(250, e -> refresher());
+        Timer timer = new Timer(350, e -> refresher());
         timer.start();
     }
 

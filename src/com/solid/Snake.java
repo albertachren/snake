@@ -146,9 +146,34 @@ public class Snake {
         return objDirection;
     }
 
+    int[] predictMovement(Snake snake, int steps) {
+        int[] futureCoords = new int[2];
+        switch (snake.direction) { // set bodypart coordinates
+            case 0:
+                futureCoords[0] = headx;
+                futureCoords[1] = heady + steps;
+                break;
+            case 1:
+                futureCoords[0] = headx + steps;
+                futureCoords[1] = heady;
+                break;
+            case 2:
+                futureCoords[0] = headx;
+                futureCoords[1] = heady - steps;
+                break;
+            case 3:
+                futureCoords[0] = headx - steps;
+                futureCoords[1] = heady;
+                break;
+        }
+
+        return futureCoords;
+    }
+
     public void update() {
         for (int[] food : food) {
-            if (headx == food[0] && heady == food[1]) {
+            int[] futureCoords = predictMovement(this, 1);
+            if (futureCoords[0] == food[0] && futureCoords[1] == food[1]) {
                 addBodypart(this);
                 this.food.remove(food);
                 int[] newFood = {r.nextInt(40), r.nextInt(40)};
@@ -211,7 +236,7 @@ public class Snake {
                 tempdistance = Math.abs(Math.abs(x) - Math.abs(headx));
             }
             distance += tempdistance;
-            if (distance > bodyparts.size() + 2) {
+            if (distance > bodyparts.size() * 2) {
                 for (int f = i; i >= 0; i--) {
                     turns.remove(i);
                     System.out.println("turn removed");
