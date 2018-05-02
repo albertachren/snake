@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class Snake {
 
-    static public int gameSize = 40;
+    static public int gameSize = 25;
     int direction = 0; //0 = north, 1 = east, 2 = south, 3 = west
     int headx;
     int heady;
@@ -45,7 +45,7 @@ public class Snake {
             int[] temp = {newX, newY, direction};
             bodyparts.add(temp);
         }
-        int[] newFood = {r.nextInt(40), r.nextInt(40)};
+        int[] newFood = {r.nextInt(gameSize), r.nextInt(gameSize)};
         food.add(newFood);
     }
 
@@ -171,12 +171,16 @@ public class Snake {
     }
 
     public void update() {
+
+
         for (int[] food : food) {
             int[] futureCoords = predictMovement(this, 1);
             if (futureCoords[0] == food[0] && futureCoords[1] == food[1]) {
                 addBodypart(this);
+                addBodypart(this);
+                addBodypart(this);
                 this.food.remove(food);
-                int[] newFood = {r.nextInt(40), r.nextInt(40)};
+                int[] newFood = {r.nextInt(gameSize), r.nextInt(gameSize)};
                 this.food.add(newFood);
             }
         }
@@ -225,6 +229,20 @@ public class Snake {
         }
 
 
+        for (int i = turns.size() - 1; i >= 0; i--) {
+            boolean onBody = false;
+            for (Snake snake : Interface.snakes) {
+                for (int[] bodypart : snake.bodyparts) {
+                    if (turns.get(i)[0] == bodypart[0] && turns.get(i)[1] == bodypart[1]) {
+                        onBody = true;
+                    }
+                }
+            }
+            if (!onBody) {
+                turns.remove(i);
+            }
+        }
+/*
         int distance = 0;
         for (int i = turns.size() - 1; i >= 0; i--) { // remove passed turns
             int tempdistance = 0;
@@ -236,13 +254,23 @@ public class Snake {
                 tempdistance = Math.abs(Math.abs(x) - Math.abs(headx));
             }
             distance += tempdistance;
-            if (distance > bodyparts.size() * 2) {
+            if (distance > bodyparts.size()) {
                 for (int f = i; i >= 0; i--) {
-                    turns.remove(i);
+                    boolean onBody = false;
+                    for (Snake snake : Interface.snakes) {
+                        for (int[] bodypart : snake.bodyparts) {
+                            if (turns.get(i)[0] == bodypart[0] && turns.get(i)[1] == bodypart[1]) {
+                                onBody = true;
+                            }
+                        }
+                    }
+                    if (!onBody) {
+                        turns.remove(i);
+                    }
                     System.out.println("turn removed");
                 }
             }
-        }
+        }*/
 
         lastdir = direction;
 

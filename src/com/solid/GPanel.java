@@ -9,14 +9,25 @@ public class GPanel extends JPanel {
     static int rectSide = 400 / Snake.gameSize;
 
     public GPanel() {
-        Timer timer = new Timer(350, e -> refresher());
+        Timer timer = new Timer(150, e -> refresher());
         timer.start();
     }
 
     public void refresher() {
         this.requestFocusInWindow();
-        for (Snake s : Interface.snakes) {
-            s.update();
+        boolean kill = false;
+        for (int i = 0; i < Interface.snakes.size(); i++) {
+            for (int[] bodypart : Interface.snakes.get(i).bodyparts) {
+                if (Interface.snakes.get(i).headx == bodypart[0] && Interface.snakes.get(i).heady == bodypart[1]) {
+                    kill = true;
+                }
+            }
+            if (!kill) {
+                Interface.snakes.get(i).update();
+            } else {
+                Interface.snaaakes.add(Interface.snakes.get(i));
+                Interface.snakes.remove(i);
+            }
             //System.out.println(s.toString());
         }
         EventQueue.invokeLater(() -> {
@@ -41,11 +52,17 @@ public class GPanel extends JPanel {
             drawRectCoords(g2d, headCoords, Color.gray);
             for (int[] part : snake.getBodyNew()) {
                 drawRectCoords(g2d, part, Color.green);
-                //System.out.println(String.valueOf(part[0]) + String.valueOf(part[1]));
             }
             for (int[] food : snake.food) {
                 drawRectCoords(g2d, food, Color.BLUE);
             }
+        }
+        for (Snake snaake : Interface.snaaakes) {
+            for (int[] part : snaake.getBodyNew()) {
+                drawRectCoords(g2d, part, Color.RED);
+            }
+            int[] headCoords = {snaake.headx, snaake.heady};
+            drawRectCoords(g2d, headCoords, Color.BLACK);
         }
     }
 }

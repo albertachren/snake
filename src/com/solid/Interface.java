@@ -8,6 +8,7 @@ import java.util.Random;
 
 public class Interface {
     public static ArrayList<Snake> snakes = new ArrayList<>();
+    public static ArrayList<Snake> snaaakes = new ArrayList<>();
     private JPanel MPanel;
     private GPanel GPanel1;
 
@@ -42,6 +43,7 @@ public class Interface {
                         }
                         break;
                     case 32: //space
+                        snaaakes.clear();
                         createSnake(5, false);
                         break;
                     case 83: //s
